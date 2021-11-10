@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 class Status extends StatelessWidget {
-  Status({Key? key} ) : super(key: key);
+  Status({Key? key}) : super(key: key);
 
   final _nokpController = TextEditingController();
   late List kursus = [];
@@ -22,6 +22,11 @@ class Status extends StatelessWidget {
             children: [
               const Text('Masukkan IC:'),
               TextField(
+                decoration: InputDecoration(
+                  filled: true,
+                  hoverColor: Colors.blue.shade100,
+                  border: const OutlineInputBorder(),
+                ),
                 controller: _nokpController,
               ),
               ElevatedButton(
@@ -34,14 +39,36 @@ class Status extends StatelessWidget {
                     print('Response status: ${response.statusCode}');
                     print('Response body: ${response.body}');
 
-                    var jsonResponse = convert.jsonDecode(response.body);
-                    kursus = jsonResponse;
+                    if (response.body == 'false') {
+                      print('No data');
+                      //show PopUp
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Alert!!"),
+                            content: const Text("Tiada Data!"),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text("OK"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      var jsonResponse = convert.jsonDecode(response.body);
+                      kursus = jsonResponse;
 
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                ResultStatus(datapass: kursus)));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ResultStatus(datapass: kursus)));
+                    }
                   },
                   child: const Text('Semak'))
             ],

@@ -14,7 +14,26 @@ final List datapass;
         body: ListView.builder(
             itemCount: datapass.length,
             itemBuilder: (context, index) {
-              return Text(datapass[index]['NamaKursus']);
+              return Card(
+                child: Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      width: 300,
+                      child: Column(
+                      children: [
+                        Text(datapass[index]['NamaKursus']),
+                        Text(datapass[index]['TarikhMula']),
+                        Text(datapass[index]['TarikhTamat']),
+                      ],
+                    )),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      width: 50,
+                      child: Text(datapass[index]['StatusPermohonan'].toString()),
+                    ),
+                  ],
+                ));
             }));
   }
 }
